@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [ 'dj-s92kg0348dj198vjm4xp.onrender.com' ]
 
-CSRF_TRUSTED_ORIGINS = [ "dj-s92kg0348dj198vjm4xp.onrender.com" ]
+CSRF_TRUSTED_ORIGINS = [ "https://dj-s92kg0348dj198vjm4xp.onrender.com" ]
 
 
 # Application definition
