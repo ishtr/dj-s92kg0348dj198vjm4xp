@@ -1,0 +1,46 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ post.title }}</h1>
+    <p>Yazar: {{ post.author.username }}</p>
+    <p>{{ post.created_at|date:"d M Y H:i" }}</p>
+
+    {% if post.image %}
+        <img src="{{ post.image.url }}" alt="Post resmi" width="400px">
+    {% endif %}
+
+    <p>{{ post.content }}</p>
+    <p>Toplam Puan: {{ score }}</p>
+
+    {% if user.is_authenticated %}
+        <p>
+            <a href="{% url 'like_post' post.pk 'like' %}" style="color: {% if user_vote == 1 %}green{% else %}black{% endif %};">👍 Beğen</a> |
+            <a href="{% url 'like_post' post.pk 'dislike' %}" style="color: {% if user_vote == -1 %}red{% else %}black{% endif %};">👎 Beğenme</a>
+        </p>
+    {% else %}
+        <p><a href="{% url 'login' %}">Giriş yap</a> ve beğen veya yorum yap!</p>
+    {% endif %}
+
+    <hr>
+    <h3>Yorumlar ({{ comments.count }})</h3>
+
+    {% for comment in comments %}
+        <div style="border-bottom:1px solid #ddd; margin-bottom:10px;">
+            <b>{{ comment.user.username }}</b> - <small>{{ comment.created_at|date:"d M Y H:i" }}</small>
+            <p>{{ comment.content }}</p>
+        </div>
+    {% empty %}
+        <p>Henüz yorum yok.</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        <h4>Yorum Yaz</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Yorumu Gönder</button>
+        </form>
+    {% endif %}
+{% endblock %}

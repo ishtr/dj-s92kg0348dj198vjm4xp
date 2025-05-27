@@ -1,0 +1,21 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Anasayfa - SocialBlog{% endblock %}
+
+{% block content %}
+    <h1>Anasayfa</h1>
+
+    {% for post in posts %}
+        <div style="border-bottom: 1px solid #ccc; margin-bottom: 10px;">
+            <h2><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h2>
+            {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 100%; height: auto; margin-bottom: 10px;">
+        {% endif %}
+            <p>{{ post.content|truncatewords:20 }}</p>
+            <p><small>Yazar: {{ post.author.username }} | {{ post.created_at|date:"d M Y H:i" }}</small></p>
+            Beğeni: {{ post.likes.count }}
+        </div>
+    {% empty %}
+        <p>Henüz post yok.</p>
+    {% endfor %}
+{% endblock %}

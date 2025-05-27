@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}SocialBlog{% endblock %}</title>
+    <!-- Font Awesome CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+        /* Genel Ayarlar */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Koyu mod için */
+        body[data-theme="dark"] {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: #0077cc;
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgb(0 0 0 / 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body[data-theme="dark"] nav {
+            background-color: #1f1f1f;
+            color: #e0e0e0;
+            box-shadow: 0 2px 4px rgb(0 0 0 / 0.7);
+        }
+
+        /* Linkler için kapsayıcı (sol kısım) */
+        .nav-left {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        nav a:hover {
+            background-color: #005fa3;
+        }
+
+        body[data-theme="dark"] nav a:hover {
+            background-color: #333333;
+        }
+
+        /* Çıkış butonu için sağ kısım */
+        .nav-right {
+            margin-left: auto;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-right a {
+            background-color: #e94e4e;
+            padding: 8px 14px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-right a:hover {
+            background-color: #c03b3b;
+        }
+
+        body[data-theme="dark"] .nav-right a {
+            background-color: #bb4444;
+        }
+
+        body[data-theme="dark"] .nav-right a:hover {
+            background-color: #992222;
+        }
+
+        /* Açık/Koyu mod butonu */
+        #theme-toggle-btn {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        #theme-toggle-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        body[data-theme="dark"] #theme-toggle-btn {
+            border-color: #e0e0e0;
+            color: #e0e0e0;
+        }
+
+        body[data-theme="dark"] #theme-toggle-btn:hover {
+            background-color: rgba(224, 224, 224, 0.2);
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 25px 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body[data-theme="dark"] .container {
+            background: #1e1e1e;
+            color: #e0e0e0;
+            box-shadow: 0 4px 12px rgb(0 0 0 / 0.9);
+        }
+
+        /* Başlıklar */
+        h1, h2, h3 {
+            color: #0077cc;
+        }
+
+        body[data-theme="dark"] h1,
+        body[data-theme="dark"] h2,
+        body[data-theme="dark"] h3 {
+            color: #66aaff;
+        }
+
+        /* Buton Sınıfı */
+        .btn {
+            background-color: #0077cc;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #005fa3;
+        }
+
+        body[data-theme="dark"] .btn:hover {
+            background-color: #1f4e7a;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <a href="{% url 'home' %}"><i class="fas fa-home"></i> Anasayfa</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}"><i class="fas fa-user"></i> Profilim</a>
+                <a href="{% url 'post_create' %}"><i class="fas fa-plus-circle"></i> Yeni Post</a>
+                <a href="{% url 'chat_room' %}"><i class="fas fa-comments"></i> Sohbet</a>
+            {% else %}
+                <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Giriş Yap</a>
+                <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Kayıt Ol</a>
+            {% endif %}
+        </div>
+        {% if user.is_authenticated %}
+        <div class="nav-right">
+            <button id="theme-toggle-btn" title="Tema değiştir">
+                <i class="fas fa-moon"></i> Koyu Mod
+            </button>
+            <a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a>
+        </div>
+        {% endif %}
+    </nav>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const body = document.body;
+
+        // Başlangıçta localStorage'dan tema kontrolü
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        body.setAttribute('data-theme', savedTheme);
+        updateButton(savedTheme);
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateButton(newTheme);
+        });
+
+        function updateButton(theme) {
+            if (theme === 'dark') {
+                themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i> Açık Mod';
+            } else {
+                themeToggleBtn.innerHTML = '<i class="fas fa-moon"></i> Koyu Mod';
+            }
+        }
+    </script>
+</body>
+</html>

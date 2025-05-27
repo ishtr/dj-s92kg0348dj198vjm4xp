@@ -1,0 +1,23 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Chat Odası{% endblock %}
+
+{% block content %}
+    <h1>Chat Odası</h1>
+
+    <div style="border:1px solid #ccc; padding:10px; max-height:400px; overflow-y:scroll;">
+        {% for msg in messages %}
+            <p><b>{{ msg.user.username }}</b> ({{ msg.timestamp|date:"H:i" }}): {{ msg.message }}</p>
+        {% empty %}
+            <p>Henüz mesaj yok.</p>
+        {% endfor %}
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <textarea name="message" rows="2" style="width:100%;" placeholder="Mesajınızı yazın..."></textarea>
+        <button type="submit">Gönder</button>
+    </form>
+
+    <p><a href="{% url 'home' %}">Ana Sayfaya Dön</a></p>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Kayıt Ol{% endblock %}
+
+{% block content %}
+    <h2>Kayıt Ol</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Kayıt Ol</button>
+    </form>
+    <a href="{% url 'login' %}">Zaten üye misin? Giriş yap</a>
+{% endblock %}
+

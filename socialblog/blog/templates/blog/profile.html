@@ -1,0 +1,21 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Profilim{% endblock %}
+
+{% block content %}
+    <h1>Profilim: {{ user.username }}</h1>
+    <p>Toplam Post: {{ post_count }}</p>
+    <p>Toplam Puan: {{ total_score }}</p>
+    <p>Toplam Beğeni: {{ likes_count }}</p>
+    <p>Toplam Beğenmeme: {{ dislikes_count }}</p>
+
+    <h3>Gönderilerim</h3>
+    {% for post in user_posts %}
+        <div style="border-bottom:1px solid #ddd; margin-bottom:10px;">
+            <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a>
+            <p><small>{{ post.created_at|date:"d M Y H:i" }}</small></p>
+        </div>
+    {% empty %}
+        <p>Henüz gönderiniz yok.</p>
+    {% endfor %}
+{% endblock %}
